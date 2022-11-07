@@ -24,7 +24,7 @@ function setup() {
   createCanvas(500, 500);
   frameRate(fr);
 
-  speedSlider = createSlider(1, 2, 1, .1);
+  speedSlider = createSlider(1, 3, 1, .1);
   speedSlider.position(0, 0);
   speedSlider.input(updateSpeed);
 
@@ -42,7 +42,7 @@ function setup() {
 function updateSpeed() {
   console.log(speedSlider.value());
   for (let i = 0; i < maxCircles; i++) {
-    orbs[i].numSteps = fr * speedSlider.value();
+    orbs[i].speed = speedSlider.value();
   }
 }
 
@@ -79,15 +79,15 @@ class Orb {
 
     this.radius = 50;
     this.step = 0;
-    this.numSteps = fr;
+    this.speed = 1;
   }
 
   draw() {
     fill(this.c);
-    let x = this.easeInOut(float(this.step / this.numSteps));
+    let x = this.easeInOut(float(this.step / (fr * 2)));
     let cvec = p5.Vector.mult(this.vec, x);
     circle(this.ix + cvec.x, this.iy + cvec.y, this.radius);
-    this.step++;
+    this.step += this.speed;
   }
 
   reset() {
