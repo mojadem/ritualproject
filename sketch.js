@@ -1,3 +1,5 @@
+let speedSlider;
+
 let orbs;
 let colors;
 let bg;
@@ -22,6 +24,10 @@ function setup() {
   createCanvas(500, 500);
   frameRate(fr);
 
+  speedSlider = createSlider(1, 2, 1, .1);
+  speedSlider.position(0, 0);
+  speedSlider.input(updateSpeed);
+
   for (let i = 0; i < maxCircles; i++) {
     orbs[i] = new Orb(
       width / 2 + cos(degreeStep * i) * radius,
@@ -33,35 +39,35 @@ function setup() {
   }
 }
 
+function updateSpeed() {
+  console.log(speedSlider.value());
+  for (let i = 0; i < maxCircles; i++) {
+    orbs[i].numSteps = fr * speedSlider.value();
+  }
+}
+
 function draw() {
   background(bg);
+
+  if (!focused) {
+    rectMode(CENTER);
+    text('click here', width/2, height/2);
+    return;
+  }
 
   for (let i = 0; i < numCircles; i++) {
     orbs[i].draw();
   }
 }
 
-function mousePressed() {
-  if (orbPlaced) {
-    return;
+function keyReleased() {
+  if (key == ' ' && numCircles + 1 <= maxCircles) {
+    numCircles++;
+  } 
+  else if (keyCode == BACKSPACE && numCircles - 1 >= 0) {
+    orbs[numCircles - 1].reset();
+    numCircles--;
   }
-
-  if (mouseButton == LEFT) {
-    if (numCircles + 1 <= maxCircles) {
-      numCircles++;
-      orbPlaced = true;
-    }
-  } else if (mouseButton == RIGHT) {
-    if (numCircles - 1 >= 0) {
-      orbs[numCircles - 1].reset();
-      numCircles--;
-      orbPlaced = true;
-    }
-  }
-}
-
-function mouseReleased() {
-  orbPlaced = false;
 }
 
 class Orb {
