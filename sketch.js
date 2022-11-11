@@ -1,32 +1,39 @@
 let speedSlider;
-
 let orbs;
 let colors;
-let bg;
 let fr;
 let numCircles;
 let maxCircles;
 let degreeStep;
 let radius;
 let orbPlaced;
+let playSize;
+let light;
+let dark;
 
 function setup() {
   orbs = [];
   colors = ["#e06767", "#e09c67", "#e0cc67", "#a2e067", "#67d6e0", "#a467e0"];
-  bg = "#678ae0";
   fr = 60;
   numCircles = 0;
   maxCircles = 6;
   degreeStep = PI / 6;
   radius = 200;
   orbPlaced = false;
+  playSize = 10;
+  light = 'rgba(255, 255, 255, .3)';
+  dark = '#222';
 
-  createCanvas(500, 500);
+  let c = createCanvas(700, 500);
   frameRate(fr);
+
+  c.mouseOver(enlargePlayIcon);
+  c.mouseOut(shrinkPlayIcon);
 
   speedSlider = createSlider(1, 3, 1, .1);
   speedSlider.position(0, 0);
   speedSlider.input(updateSpeed);
+  speedSlider.hide();
 
   for (let i = 0; i < maxCircles; i++) {
     orbs[i] = new Orb(
@@ -47,23 +54,41 @@ function updateSpeed() {
 }
 
 function draw() {
-  background(bg);
+  clear();
+  speedSlider.hide();
 
   if (!focused) {
-    rectMode(CENTER);
-    text('click here', width/2, height/2);
+    noStroke();
+    fill(light);
+    triangle(width / 2 - playSize, height / 2 - 2 * playSize, width / 2 + 2 * playSize, height / 2, width / 2 - playSize, height / 2 + 2 * playSize);
     return;
   }
 
+  speedSlider.show();
+  noFill();
+  stroke(light);
+  strokeWeight(2);
+  circle(width / 2, height / 2, radius * 2);
+  console.log(mouseX);
+
+  stroke('#222');
   for (let i = 0; i < numCircles; i++) {
     orbs[i].draw();
   }
 }
 
+function enlargePlayIcon() {
+  playSize = 13;
+}
+
+function shrinkPlayIcon() {
+  playSize = 10;
+}
+
 function keyReleased() {
   if (key == ' ' && numCircles + 1 <= maxCircles) {
     numCircles++;
-  } 
+  }
   else if (keyCode == BACKSPACE && numCircles - 1 >= 0) {
     orbs[numCircles - 1].reset();
     numCircles--;
