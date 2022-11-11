@@ -38,13 +38,9 @@ ol {
 section {
   scroll-snap-align: start;
   padding: 20px;
-}
-
-#intro {
-  height: 100vh;
+  min-height: 100vh;
 }
 
 #canvas {
   display: flex;
-  height: 100vh;
 }
