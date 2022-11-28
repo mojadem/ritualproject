@@ -30,7 +30,7 @@ function setup() {
   c.mouseOver(enlargePlayIcon);
   c.mouseOut(shrinkPlayIcon);
 
-  speedSlider = createSlider(1, 3, 1, .1);
+  speedSlider = createSlider(1, 4, 1, .1);
   speedSlider.position(0, 0);
   speedSlider.input(updateSpeed);
   speedSlider.hide();
@@ -109,7 +109,7 @@ class Orb {
 
   draw() {
     fill(this.c);
-    let x = this.easeInOut(float(this.step / (fr * 2)));
+    let x = this.easeInOut(float(this.step / (fr * 3)));
     let cvec = p5.Vector.mult(this.vec, x);
     circle(this.ix + cvec.x, this.iy + cvec.y, this.radius);
     this.step += this.speed;
